@@ -216,7 +216,7 @@ function init() {
     box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
     box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
 
-    scene.add( box );
+//    scene.add( box );
     objects.push( box );
 
   }
