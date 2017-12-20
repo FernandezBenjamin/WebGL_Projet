@@ -97,79 +97,36 @@ function init() {
   controls = new THREE.PointerLockControls( camera );
   scene.add( controls.getObject() );
 
+/*==============================================
+
+                    TEXTURE
+
+================================================*/
+
+var floorMaterial = new THREE.MeshBasicMaterial({color: 0xBBBCBC});
+
+  var path = "textures/salle/";
+  var format = '.png';
+  var urls = [
+      path + 'murdroite' + format,
+      path + 'murgauche' + format,
+      path + 'plafond' + format,
+      path + 'sol' + format,
+      path + 'murfond' + format,
+      path + 'murentree' + format
+  ];
 
 
 
-
-var path = "textures/salle/";
-                var format = '.png';
-                var urls = [
-                    path + 'murdroite' + format,
-                    path + 'murgauche' + format,
-                    path + 'plafond' + format,
-                    path + 'sol' + format,
-                    path + 'murfond' + format,
-                    path + 'murentree' + format
-                ];
+  var reflectionCube = THREE.ImageUtils.loadTextureCube(urls);
 
 
-
-                var reflectionCube = THREE.ImageUtils.loadTextureCube(urls);
-
-
-                var materialsky = new THREE.ShaderMaterial( {
-                  map : reflectionCube
-                });
-                mesh2 = new THREE.Mesh(new THREE.BoxGeometry(150, 150, 150, 1, 1, 1, null, true), materialsky);
-                mesh2.position.set(0, 200, 0);
-                scene.add(mesh2);
-
-
-
-
-
-/*
-
-var textureCube = THREE.ImageUtils.load( 'textures/skyboxsun25degtest.png' );
-
-
-var shader = THREE.ShaderUtils.lib["cube"];
-
-var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
-
-uniforms['tCube'].texture= textureCube;   // textureCube has been init before
-
-var material = new THREE.MeshShaderMaterial({
-    fragmentShader    : shader.fragmentShader,
-    vertexShader  : shader.vertexShader,
-    uniforms  : uniforms
-});
-
-
-skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 1000, 1000, 1000, 1, 1, 1, null, true ), material );
-
-scene.addObject( skyboxMesh );
-
-*/
-
-/*
-        var texture = new THREE.TextureLoader().load( 'textures/skyboxsun25degtest.png' );
-        var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-        var material = new THREE.MeshBasicMaterial( { map: texture } );
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-        renderer = new THREE.WebGLRenderer();
-        renderer.setPixelRatio( window.devicePixelRatio );
-        renderer.setSize( window.innerWidth, window.innerHeight );1
-        document.body.appendChild( renderer.domElement );
-        //
-        window.addEventListener( 'resize', onWindowResize, false );
-*/
-
-
-
-
-
+  var materialsky = new THREE.ShaderMaterial( {
+    map : reflectionCube
+  });
+  mesh2 = new THREE.Mesh(new THREE.BoxGeometry(150, 150, 150, 1, 1, 1, null, true), materialsky);
+  mesh2.position.set(0, 200, 0);
+  scene.add(mesh2);
 
 
   var onKeyDown = function ( event ) {
@@ -244,62 +201,11 @@ scene.addObject( skyboxMesh );
 
   var floorGeometry = new THREE.PlaneGeometry( 1000, 1000, 10, 10);
   floorGeometry.rotateX( - Math.PI / 2 );
-
-/*
-  for ( var i = 0, l = floorGeometry.vertices.length; i < l; i ++ ) {
-
-    var vertex = floorGeometry.vertices[ i ];
-    vertex.x += Math.random() * 20 - 10;
-    vertex.y += Math.random() * 2;
-    vertex.z += Math.random() * 20 - 10;
-
-  }
-*/
-  for ( var i = 0, l = floorGeometry.faces.length; i < l; i ++ ) {
-
-    var face = floorGeometry.faces[ i ];
-    face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-  }
-
-  var floorMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
-
   var floor = new THREE.Mesh( floorGeometry, floorMaterial );
   scene.add( floor );
 
 
-/*
-  // objects
 
-  var boxGeometry = new THREE.BoxGeometry( 20, 20, 20 );
-
-  for ( var i = 0, l = boxGeometry.faces.length; i < l; i ++ ) {
-
-    var face = boxGeometry.faces[ i ];
-    face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-  }
-
-  for ( var i = 0; i < 500; i ++ ) {
-
-    var boxMaterial = new THREE.MeshPhongMaterial( { specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors } );
-    boxMaterial.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-    var box = new THREE.Mesh( boxGeometry, boxMaterial );
-    box.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
-    box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
-    box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
-
-    scene.add( box );
-    objects.push( box );
-
-  }
-*/
-  //
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
@@ -337,8 +243,8 @@ function animate() {
     var time = performance.now();
     var delta = ( time - prevTime ) / 1000;
 
-    velocity.x -= velocity.x * 10.0 * delta;
-    velocity.z -= velocity.z * 10.0 * delta;
+    velocity.x -= velocity.x * 100.0 * delta;
+    velocity.z -= velocity.z * 100.0 * delta;
 
     velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
