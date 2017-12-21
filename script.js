@@ -7,7 +7,14 @@ var raycaster;
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
 
-// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+  var parameters = {
+    oceanSide: 50,
+    size: 4.0,
+    distortionScale: 3.7,
+    alpha: 1.0
+  };
+
 
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -85,17 +92,19 @@ var direction = new THREE.Vector3();
 function init() {
 
   camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
-
+  camera.position.set(0, 50, 100);
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0xffffff );
   scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 
   var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
   light.position.set( 0.5, 1, 0.75 );
-  scene.add( light );
+//  scene.add( light );
 
   controls = new THREE.PointerLockControls( camera );
   scene.add( controls.getObject() );
+
+
 
   var onKeyDown = function ( event ) {
 
@@ -167,9 +176,10 @@ function init() {
 
   // floor
 
-  var floorGeometry = new THREE.PlaneGeometry( 2000, 2000, 100, 100 );
+  var floorGeometry = new THREE.PlaneGeometry( 1000, 1000, 10, 10);
   floorGeometry.rotateX( - Math.PI / 2 );
 
+/*
   for ( var i = 0, l = floorGeometry.vertices.length; i < l; i ++ ) {
 
     var vertex = floorGeometry.vertices[ i ];
@@ -178,7 +188,7 @@ function init() {
     vertex.z += Math.random() * 20 - 10;
 
   }
-
+*/
   for ( var i = 0, l = floorGeometry.faces.length; i < l; i ++ ) {
 
     var face = floorGeometry.faces[ i ];
@@ -191,8 +201,10 @@ function init() {
   var floorMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
 
   var floor = new THREE.Mesh( floorGeometry, floorMaterial );
-  scene.add( floor );
+//  scene.add( floor );
 
+
+/*
   // objects
 
   var boxGeometry = new THREE.BoxGeometry( 20, 20, 20 );
@@ -216,12 +228,16 @@ function init() {
     box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
     box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
 
-//    scene.add( box );
+    scene.add( box );
     objects.push( box );
 
   }
-
+*/
   //
+
+    setSkybox();
+
+
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
@@ -233,6 +249,57 @@ function init() {
   window.addEventListener( 'resize', onWindowResize, false );
 
 }
+
+
+
+
+
+
+  function setSkybox() {
+    cubeMap = new THREE.CubeTexture( [] );
+    cubeMap.format = THREE.RGBFormat;
+    var loader = new THREE.ImageLoader();
+    loader.load( 'textures/salle/patron.png', function ( image ) {
+      var getSide = function ( x, y ) {
+        var size = 4096;
+        var canvas = document.createElement( 'canvas' );
+        canvas.width = size;
+        canvas.height = size;
+        var context = canvas.getContext( '2d' );
+        context.drawImage( image, - x * size, - y * size );
+        return canvas;
+      };
+      cubeMap.images[ 0 ] = getSide( 2, 1 ); // px
+      cubeMap.images[ 1 ] = getSide( 0, 1 ); // nx
+      cubeMap.images[ 2 ] = getSide( 1, 0 ); // py
+      cubeMap.images[ 3 ] = getSide( 1, 2 ); // ny
+      cubeMap.images[ 4 ] = getSide( 1, 1 ); // pz
+      cubeMap.images[ 5 ] = getSide( 3, 1 ); // nz
+      cubeMap.needsUpdate = true;
+    } );
+    var cubeShader = THREE.ShaderLib[ 'cube' ];
+    cubeShader.uniforms[ 'tCube' ].value = cubeMap;
+    var skyBoxMaterial = new THREE.ShaderMaterial( {
+      fragmentShader: cubeShader.fragmentShader,
+      vertexShader: cubeShader.vertexShader,
+      uniforms: cubeShader.uniforms,
+      side: THREE.BackSide
+    } );
+    var skyBox = new THREE.Mesh(
+      new THREE.BoxGeometry( parameters.oceanSide + 100, parameters.oceanSide+ 100, parameters.oceanSide + 100 ),
+      skyBoxMaterial
+    );
+    scene.add( skyBox );
+  }
+
+
+
+
+
+
+
+
+
 
 function onWindowResize() {
 
@@ -257,7 +324,7 @@ function animate() {
     var onObject = intersections.length > 0;
 
     var time = performance.now();
-    var delta = ( time - prevTime ) / 1000;
+    var delta = ( time - prevTime ) / 200; //Change la vitesse (par défaut c'etait à 1000)
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
