@@ -1,3 +1,12 @@
+
+// On fait "e" pour ajouter un os du squelette sur blender
+//Lensflars - Pour source lumineuse
+//Particles - particles/sprites pour un coté "magique"
+//Go faire des recherches en modes "smoke threejs"
+
+
+
+
 var camera, scene, renderer, controls;
 
 var objects = [];
@@ -9,7 +18,7 @@ var instructions = document.getElementById( 'instructions' );
 
 
   var parameters = {
-    oceanSide: 50,
+    oceanSide: 500,
     size: 4.0,
     distortionScale: 3.7,
     alpha: 1.0
@@ -261,7 +270,7 @@ function init() {
     var loader = new THREE.ImageLoader();
     loader.load( 'textures/salle/patron.png', function ( image ) {
       var getSide = function ( x, y ) {
-        var size = 4096;
+        var size = 1770;
         var canvas = document.createElement( 'canvas' );
         canvas.width = size;
         canvas.height = size;
@@ -286,9 +295,10 @@ function init() {
       side: THREE.BackSide
     } );
     var skyBox = new THREE.Mesh(
-      new THREE.BoxGeometry( parameters.oceanSide + 100, parameters.oceanSide+ 100, parameters.oceanSide + 100 ),
+      new THREE.BoxGeometry( parameters.oceanSide, parameters.oceanSide, parameters.oceanSide*1.5),
       skyBoxMaterial
     );
+    skyBox.position.set(0, 150,0);
     scene.add( skyBox );
   }
 
