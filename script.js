@@ -18,7 +18,7 @@ var instructions = document.getElementById( 'instructions' );
 
 
   var parameters = {
-    oceanSide: 500,
+    oceanSide: 1000,
     size: 4.0,
     distortionScale: 3.7,
     alpha: 1.0
@@ -185,7 +185,7 @@ function init() {
 
   // floor
 
-  var floorGeometry = new THREE.PlaneGeometry( 1000, 1000, 10, 10);
+  var floorGeometry = new THREE.PlaneGeometry( 10000, 10000, 10, 10);
   floorGeometry.rotateX( - Math.PI / 2 );
 
 /*
@@ -244,7 +244,64 @@ function init() {
 */
   //
 
-    setSkybox();
+  var valueX = 0;
+  var valueY = 0;
+  var valueZ = 0;
+
+  setSkybox(valueX, valueY, valueZ);
+
+  setSkybox(1200, 150, -2300);
+  setSkybox(-1200, 150, -2300);
+
+  setSkybox(4000, 150, -4600);
+  setSkybox(1200, 150, -4600);
+  setSkybox(-1200, 150, -4600);
+  setSkybox(-4000, 150, -4600);
+
+
+
+
+/*
+for (var i = 0; i != 2; i++) {
+  valueX = 1200;
+  valueZ = -2500;
+
+
+  for (var j = 0; j != 2; i++) {
+    valueX += 1200;
+    valueZ += -2500;
+    if (i == 1) {
+      valueX = valueX * (-1);
+    }
+  }
+
+
+  setSkybox(valueX, valueY, valueZ);
+}
+*/
+/*  
+  var valueX = 0;
+  var valueY = 150;
+  var valueZ = 0;
+
+  for (var i = 0; i != 3; i++) {
+
+
+    setSkybox(valueX, valueY, valueZ);
+
+    for (var j = 0; j != 2; i++) {
+      if (j == 1) {
+        setSkybox(valueX + 500, valueY, valueZ);
+      }else{
+        setSkybox(valueX - 500, valueY, valueZ);
+      }
+    }
+
+    valueX = valueX +1000;
+
+  }
+*/
+
 
 
 
@@ -264,26 +321,40 @@ function init() {
 
 
 
-  function setSkybox() {
+
+
+
+
+
+
+// ______ Fonctions ______ //
+
+  function setSkybox(a, b, c) {
     cubeMap = new THREE.CubeTexture( [] );
     cubeMap.format = THREE.RGBFormat;
     var loader = new THREE.ImageLoader();
-    loader.load( 'textures/salle/patron.png', function ( image ) {
+    loader.load( 'textures/salle/patronv5.png', function ( image ) {
       var getSide = function ( x, y ) {
         var size = 1770;
+        // 2220 - 1770
         var canvas = document.createElement( 'canvas' );
         canvas.width = size;
         canvas.height = size;
         var context = canvas.getContext( '2d' );
-        context.drawImage( image, - x * size, - y * size );
+        context.drawImage( image, - x * size, - y * size);
         return canvas;
       };
-      cubeMap.images[ 0 ] = getSide( 2, 1 ); // px
-      cubeMap.images[ 1 ] = getSide( 0, 1 ); // nx
-      cubeMap.images[ 2 ] = getSide( 1, 0 ); // py
-      cubeMap.images[ 3 ] = getSide( 1, 2 ); // ny
-      cubeMap.images[ 4 ] = getSide( 1, 1 ); // pz
-      cubeMap.images[ 5 ] = getSide( 3, 1 ); // nz
+      // Ici, la premiere valeur sera le x et la deuxieme sera y. y partant du haut-gauche
+      cubeMap.images[ 0 ] = getSide( 0, 1 ); // px //entrée
+      cubeMap.images[ 1 ] = getSide( 2, 1 ); // nx //fond
+
+      cubeMap.images[ 2 ] = getSide( 1, 0 ); // pz - plafond
+      cubeMap.images[ 3 ] = getSide( 1, 2 ); // nz - sol
+
+      cubeMap.images[ 4 ] = getSide( 3, 1 ); // py - mur
+      cubeMap.images[ 5 ] = getSide( 1, 1 ); // ny - mur
+
+
       cubeMap.needsUpdate = true;
     } );
     var cubeShader = THREE.ShaderLib[ 'cube' ];
@@ -295,21 +366,12 @@ function init() {
       side: THREE.BackSide
     } );
     var skyBox = new THREE.Mesh(
-      new THREE.BoxGeometry( parameters.oceanSide, parameters.oceanSide, parameters.oceanSide*1.5),
+      new THREE.BoxGeometry( parameters.oceanSide, parameters.oceanSide, parameters.oceanSide),
       skyBoxMaterial
     );
-    skyBox.position.set(0, 150,0);
+    skyBox.position.set(a, b+250, c);
     scene.add( skyBox );
   }
-
-
-
-
-
-
-
-
-
 
 function onWindowResize() {
 
@@ -334,7 +396,7 @@ function animate() {
     var onObject = intersections.length > 0;
 
     var time = performance.now();
-    var delta = ( time - prevTime ) / 200; //Change la vitesse (par défaut c'etait à 1000)
+    var delta = ( time - prevTime ) / 100; //Change la vitesse (par défaut c'etait à 1000)
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
