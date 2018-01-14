@@ -1,4 +1,5 @@
-var camera, scene, renderer, controls;
+var container,camera, scene, renderer, controls,stats;
+var skyboxMesh;
 
 var objects = [];
 
@@ -96,50 +97,57 @@ function init() {
 
   controls = new THREE.PointerLockControls( camera );
   scene.add( controls.getObject() );
+/*==============================================
+                    SOUND
+================================================*/
 
+    var listener = new THREE.AudioListener();
+    camera.add( listener );
+
+    var sound = new THREE.Audio( listener );
+
+    var audioLoader = new THREE.AudioLoader();
+
+    audioLoader.load( 'sound/pluie.ogg', function( buffer ) {
+    	sound.setBuffer( buffer );
+    	sound.setLoop( true );
+    	sound.setVolume( 0.5 );
+    	sound.play();
+    });
 /*==============================================
                     TEXTURE
 ================================================*/
 
 var floorMaterial = new THREE.MeshBasicMaterial({color: 0xBBBCBC});
 
-  var path = "textures/salle/";
-  var format = '.png';
+
+
+  var urlPrefix = "texture/test/";
   var urls = [
-      path + 'murdroite' + format,
-      path + 'murgauche' + format,
-      path + 'plafond' + format,
-      path + 'sol' + format,
-      path + 'murfond' + format,
-      path + 'murentree' + format
-  ];
-/*==============================================
-                    SOUND
-================================================*/
+                urlPrefix + "posx.jpg",
+                urlPrefix + "negx.jpg",
+                urlPrefix + "posy.jpg",
+                urlPrefix + "negy.jpg",
+                urlPrefix + "posz.jpg",
+                urlPrefix + "negz.jpg"
+              ];
+  var textureCube = THREE.ImageUtils.loadTextureCube( urls );
 
-  var listener = new THREE.AudioListener();
-  camera.add( listener );
 
-  var sound = new THREE.Audio( listener );
-
-  var audioLoader = new THREE.AudioLoader();
-
-  audioLoader.load( 'sound/pluie.mp3', function( buffer ) {
-  	sound.setBuffer( buffer );
-  	sound.setLoop( true );
-  	sound.setVolume( 0.5 );
-  	sound.play();
+  var shader = THREE.ShaderUtils.lib["cube"];
+  var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+  uniforms['tCube'].texture= textureCube;   // textureCube has been init before
+  var material = new THREE.MeshShaderMaterial({
+      fragmentShader    : shader.fragmentShader,
+      vertexShader  : shader.vertexShader,
+      uniforms  : uniforms
   });
 
-  var reflectionCube = THREE.ImageUtils.loadTextureCube(urls);
+  // build the skybox Mesh
+  skyboxMesh    = new THREE.Mesh( new THREE.CubeGeometry( 100000, 100000, 100000, 1, 1, 1, null, true ), material );
+  // add it to the scene
+  scene.addObject( skyboxMesh );
 
-
-  var materialsky = new THREE.ShaderMaterial( {
-    map : reflectionCube
-  });
-  mesh2 = new THREE.Mesh(new THREE.BoxGeometry(150, 150, 150, 1, 1, 1, null, true), materialsky);
-  mesh2.position.set(0, 200, 0);
-  scene.add(mesh2);
 
 
   var onKeyDown = function ( event ) {
@@ -219,16 +227,27 @@ var floorMaterial = new THREE.MeshBasicMaterial({color: 0xBBBCBC});
 
 
 
+  container = document.createElement( 'div' );
+  document.body.appendChild( container );
+
 
   renderer = new THREE.WebGLRenderer();
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
-  //
+  renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	container.appendChild( renderer.domElement );
+
+//Performance
+  stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.top = '0px';
+	container.appendChild( stats.domElement );
+
 
   window.addEventListener( 'resize', onWindowResize, false );
-
 }
 
 function onWindowResize() {
@@ -241,6 +260,8 @@ function onWindowResize() {
 }
 
 function animate() {
+
+  stats.begin();
 
   requestAnimationFrame( animate );
 
@@ -289,6 +310,7 @@ function animate() {
     }
 
     prevTime = time;
+    stats.end();
 
   }
 
