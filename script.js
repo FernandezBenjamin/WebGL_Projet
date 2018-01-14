@@ -106,6 +106,25 @@ function init() {
   scene.background = new THREE.Color( 0xffffff );
   scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 
+
+  /*==============================================
+                    SOUND
+================================================*/
+
+    var listener = new THREE.AudioListener();
+    camera.add( listener );
+
+    var sound = new THREE.Audio( listener );
+
+    var audioLoader = new THREE.AudioLoader();
+
+    audioLoader.load( 'sound/pluie.ogg', function( buffer ) {
+      sound.setBuffer( buffer );
+      sound.setLoop( true );
+      sound.setVolume( 0.5 );
+      sound.play();
+    });
+
   var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
   light.position.set( 0.5, 1, 0.75 );
 //  scene.add( light );
@@ -195,14 +214,14 @@ function init() {
   setSkybox(1200, 150, -2300, textureSBO);
   setSkybox(-1200, 150, -2300, textureSBO);
 
-  setSkybox(4000, 150, -4600, textureSBO);
-  setSkybox(1200, 150, -4600, textureSBO);
-  setSkybox(-1200, 150, -4600, textureSBO);
-  setSkybox(-4000, 150, -4600, textureSBO);
+  // setSkybox(4000, 150, -4600, textureSBO);
+  // setSkybox(1200, 150, -4600, textureSBO);
+  // setSkybox(-1200, 150, -4600, textureSBO);
+  // setSkybox(-4000, 150, -4600, textureSBO);
 
 
 //NANI ????????
-  setSkybox(0, 150, -8000, textureFinale);
+  // setSkybox(0, 150, -8000, textureFinale);
 
 
 
@@ -265,78 +284,78 @@ function init() {
 
 //---------------- NEIGE --------------------
 
-var SNOW_Picture = 'textures/particle2.png'; 
-var SNOW_no = 15;  
-  
-var SNOW_browser_IE_NS = (document.body.clientHeight) ? 1 : 0;  
-var SNOW_browser_MOZ = (self.innerWidth) ? 1 : 0;  
-var SNOW_browser_IE7 = (document.documentElement.clientHeight) ? 1 : 0;  
-  
-var SNOW_Time;  
-var SNOW_dx, SNOW_xp, SNOW_yp;  
-var SNOW_am, SNOW_stx, SNOW_sty;   
-var i, SNOW_Browser_Width, SNOW_Browser_Height;  
-  
-if (SNOW_browser_IE_NS)  
-{  
-    SNOW_Browser_Width = document.body.clientWidth;  
-    SNOW_Browser_Height = document.body.clientHeight;  
-}  
-else if (SNOW_browser_MOZ)  
-{  
-    SNOW_Browser_Width = self.innerWidth - 20;  
-    SNOW_Browser_Height = self.innerHeight;  
-}  
-else if (SNOW_browser_IE7)  
-{  
-    SNOW_Browser_Width = document.documentElement.clientWidth;  
-    SNOW_Browser_Height = document.documentElement.clientHeight;  
-}  
-  
-SNOW_dx = new Array();  
-SNOW_xp = new Array();  
-SNOW_yp = new Array();  
-SNOW_am = new Array();  
-SNOW_stx = new Array();  
-SNOW_sty = new Array();  
-  
-for (i = 0; i < SNOW_no; ++ i)   
-{   
-    SNOW_dx[i] = 0;   
-    SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-50);  
-    SNOW_yp[i] = Math.random()*SNOW_Browser_Height;  
-    SNOW_am[i] = Math.random()*20;   
-    SNOW_stx[i] = 0.02 + Math.random()/10;  
-    SNOW_sty[i] = 0.7 + Math.random();  
-    if (i == 0) document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><a href=\"http://www.peters1.dk\" target=\"_blank\"><\img src=\""+SNOW_Picture+"\" border=\"0\"></a><\/div>");  
-    else document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><\img src=\""+SNOW_Picture+"\" border=\"0\"><\/div>");  
-}  
-  
-function SNOW_Weather()   
-{   
-  
-for (i = 0; i < SNOW_no; ++ i)   
-{   
-    SNOW_yp[i] += SNOW_sty[i];  
-  
-    if (SNOW_yp[i] > SNOW_Browser_Height-50)   
-    {  
-        SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-SNOW_am[i]-30);  
-        SNOW_yp[i] = 0;  
-        SNOW_stx[i] = 0.02 + Math.random()/10;  
-        SNOW_sty[i] = 0.7 + Math.random();  
-    }  
-  
-    SNOW_dx[i] += SNOW_stx[i];  
-  
-    document.getElementById("SNOW_flake"+i).style.top=SNOW_yp[i]+"px";  
-    document.getElementById("SNOW_flake"+i).style.left=SNOW_xp[i] + SNOW_am[i]*Math.sin(SNOW_dx[i])+"px";  
-}  
-  
-SNOW_Time = setTimeout("SNOW_Weather()", 10);  
-  
-}  
-  
+var SNOW_Picture = 'textures/particle2.png';
+var SNOW_no = 15;
+
+var SNOW_browser_IE_NS = (document.body.clientHeight) ? 1 : 0;
+var SNOW_browser_MOZ = (self.innerWidth) ? 1 : 0;
+var SNOW_browser_IE7 = (document.documentElement.clientHeight) ? 1 : 0;
+
+var SNOW_Time;
+var SNOW_dx, SNOW_xp, SNOW_yp;
+var SNOW_am, SNOW_stx, SNOW_sty;
+var i, SNOW_Browser_Width, SNOW_Browser_Height;
+
+if (SNOW_browser_IE_NS)
+{
+    SNOW_Browser_Width = document.body.clientWidth;
+    SNOW_Browser_Height = document.body.clientHeight;
+}
+else if (SNOW_browser_MOZ)
+{
+    SNOW_Browser_Width = self.innerWidth - 20;
+    SNOW_Browser_Height = self.innerHeight;
+}
+else if (SNOW_browser_IE7)
+{
+    SNOW_Browser_Width = document.documentElement.clientWidth;
+    SNOW_Browser_Height = document.documentElement.clientHeight;
+}
+
+SNOW_dx = new Array();
+SNOW_xp = new Array();
+SNOW_yp = new Array();
+SNOW_am = new Array();
+SNOW_stx = new Array();
+SNOW_sty = new Array();
+
+for (i = 0; i < SNOW_no; ++ i)
+{
+    SNOW_dx[i] = 0;
+    SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-50);
+    SNOW_yp[i] = Math.random()*SNOW_Browser_Height;
+    SNOW_am[i] = Math.random()*20;
+    SNOW_stx[i] = 0.02 + Math.random()/10;
+    SNOW_sty[i] = 0.7 + Math.random();
+    if (i == 0) document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><a href=\"http://www.peters1.dk\" target=\"_blank\"><\img src=\""+SNOW_Picture+"\" border=\"0\"></a><\/div>");
+    else document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><\img src=\""+SNOW_Picture+"\" border=\"0\"><\/div>");
+}
+
+function SNOW_Weather()
+{
+
+for (i = 0; i < SNOW_no; ++ i)
+{
+    SNOW_yp[i] += SNOW_sty[i];
+
+    if (SNOW_yp[i] > SNOW_Browser_Height-50)
+    {
+        SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-SNOW_am[i]-30);
+        SNOW_yp[i] = 0;
+        SNOW_stx[i] = 0.02 + Math.random()/10;
+        SNOW_sty[i] = 0.7 + Math.random();
+    }
+
+    SNOW_dx[i] += SNOW_stx[i];
+
+    document.getElementById("SNOW_flake"+i).style.top=SNOW_yp[i]+"px";
+    document.getElementById("SNOW_flake"+i).style.left=SNOW_xp[i] + SNOW_am[i]*Math.sin(SNOW_dx[i])+"px";
+}
+
+SNOW_Time = setTimeout("SNOW_Weather()", 10);
+
+}
+
 SNOW_Weather();
 
 
@@ -353,7 +372,7 @@ SNOW_Weather();
 
 
 
-        
+
     };
 
 
@@ -391,8 +410,8 @@ function animate() {
     var time = performance.now();
     var delta = ( time - prevTime ) / 100; //Change la vitesse (par défaut c'etait à 1000)
 
-    velocity.x -= velocity.x * 10.0 * delta;
-    velocity.z -= velocity.z * 10.0 * delta;
+    velocity.x -= velocity.x * 7.0 * delta;
+    velocity.z -= velocity.z * 7.0 * delta;
 
     velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
@@ -401,32 +420,32 @@ function animate() {
     direction.normalize(); // this ensures consistent movements in all directions
 
 
-/*
-    if ( controls.getObject().position.x > 250 ) {
-      velocity.x = 0;
-      moveRight = false;
-    }
 
-    if ( controls.getObject().position.x < -250 ) {
-
-      velocity.x = 0;
-      moveLeft = false;
-    }
-
-    if ( controls.getObject().position.z < -400 ) {
-      velocity.z = 0;
-      moveForward = false;
-    }
-    if ( controls.getObject().position.z < -450 ) {
-      velocity.z = 0;
-      moveBackward = false;
-    }
-*/
-
+    // if ( controls.getObject().position.x > 250 ) {
+    //   velocity.x = 0;
+    //   moveRight = false;
+    // }
+    //
+    // if ( controls.getObject().position.x < -250 ) {
+    //
+    //   velocity.x = 0;
+    //   moveLeft = false;
+    // }
+    //
+    // if ( controls.getObject().position.z < -400 ) {
+    //   velocity.z = 0;
+    //   moveForward = false;
+    // }
+    // if ( controls.getObject().position.z < -450 ) {
+    //   velocity.z = 0;
+    //   moveBackward = false;
+    // }
 
 
-    if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
-    if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
+
+
+    if ( moveForward || moveBackward ) velocity.z -= direction.z * 10.0 * delta;
+    if ( moveLeft || moveRight ) velocity.x -= direction.x * 10.0 * delta;
 
     if ( onObject === true ) {
 
