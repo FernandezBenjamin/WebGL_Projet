@@ -181,126 +181,28 @@ function init() {
   document.addEventListener( 'keydown', onKeyDown, false );
   document.addEventListener( 'keyup', onKeyUp, false );
 
-  raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
-  // floor
-
-  var floorGeometry = new THREE.PlaneGeometry( 10000, 10000, 10, 10);
-  floorGeometry.rotateX( - Math.PI / 2 );
-
-/*
-  for ( var i = 0, l = floorGeometry.vertices.length; i < l; i ++ ) {
-
-    var vertex = floorGeometry.vertices[ i ];
-    vertex.x += Math.random() * 20 - 10;
-    vertex.y += Math.random() * 2;
-    vertex.z += Math.random() * 20 - 10;
-
-  }
-*/
-  for ( var i = 0, l = floorGeometry.faces.length; i < l; i ++ ) {
-
-    var face = floorGeometry.faces[ i ];
-    face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-  }
-
-  var floorMaterial = new THREE.MeshBasicMaterial( { vertexColors: THREE.VertexColors } );
-
-  var floor = new THREE.Mesh( floorGeometry, floorMaterial );
-//  scene.add( floor );
-
-
-/*
-  // objects
-
-  var boxGeometry = new THREE.BoxGeometry( 20, 20, 20 );
-
-  for ( var i = 0, l = boxGeometry.faces.length; i < l; i ++ ) {
-
-    var face = boxGeometry.faces[ i ];
-    face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-    face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-  }
-
-  for ( var i = 0; i < 500; i ++ ) {
-
-    var boxMaterial = new THREE.MeshPhongMaterial( { specular: 0xffffff, flatShading: true, vertexColors: THREE.VertexColors } );
-    boxMaterial.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
-
-    var box = new THREE.Mesh( boxGeometry, boxMaterial );
-    box.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
-    box.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
-    box.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
-
-    scene.add( box );
-    objects.push( box );
-
-  }
-*/
-  //
-
-  var valueX = 0;
-  var valueY = 0;
-  var valueZ = 0;
-
-  setSkybox(valueX, valueY, valueZ);
-
-  setSkybox(1200, 150, -2300);
-  setSkybox(-1200, 150, -2300);
-
-  setSkybox(4000, 150, -4600);
-  setSkybox(1200, 150, -4600);
-  setSkybox(-1200, 150, -4600);
-  setSkybox(-4000, 150, -4600);
+  raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, -1, 0), 0, 10 );
 
 
 
 
-/*
-for (var i = 0; i != 2; i++) {
-  valueX = 1200;
-  valueZ = -2500;
+
+  var textureSBO = 'textures/salle/patronv5.png';
+  var textureFinale = 'textures/salle/patronfin.png';
+
+  setSkybox(0, 150, 0, textureSBO);
+
+  setSkybox(1200, 150, -2300, textureSBO);
+  setSkybox(-1200, 150, -2300, textureSBO);
+
+  setSkybox(4000, 150, -4600, textureSBO);
+  setSkybox(1200, 150, -4600, textureSBO);
+  setSkybox(-1200, 150, -4600, textureSBO);
+  setSkybox(-4000, 150, -4600, textureSBO);
 
 
-  for (var j = 0; j != 2; i++) {
-    valueX += 1200;
-    valueZ += -2500;
-    if (i == 1) {
-      valueX = valueX * (-1);
-    }
-  }
-
-
-  setSkybox(valueX, valueY, valueZ);
-}
-*/
-/*  
-  var valueX = 0;
-  var valueY = 150;
-  var valueZ = 0;
-
-  for (var i = 0; i != 3; i++) {
-
-
-    setSkybox(valueX, valueY, valueZ);
-
-    for (var j = 0; j != 2; i++) {
-      if (j == 1) {
-        setSkybox(valueX + 500, valueY, valueZ);
-      }else{
-        setSkybox(valueX - 500, valueY, valueZ);
-      }
-    }
-
-    valueX = valueX +1000;
-
-  }
-*/
+//NANI ????????
+  setSkybox(0, 150, -8000, textureFinale);
 
 
 
@@ -310,30 +212,18 @@ for (var i = 0; i != 2; i++) {
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
-  //
-
   window.addEventListener( 'resize', onWindowResize, false );
 
 }
 
 
-
-
-
-
-
-
-
-
-
-
 // ______ Fonctions ______ //
 
-  function setSkybox(a, b, c) {
+  function setSkybox(a, b, c, d) {
     cubeMap = new THREE.CubeTexture( [] );
     cubeMap.format = THREE.RGBFormat;
     var loader = new THREE.ImageLoader();
-    loader.load( 'textures/salle/patronv5.png', function ( image ) {
+    loader.load( d, function ( image ) {
       var getSide = function ( x, y ) {
         var size = 1770;
         // 2220 - 1770
@@ -369,9 +259,118 @@ for (var i = 0; i != 2; i++) {
       new THREE.BoxGeometry( parameters.oceanSide, parameters.oceanSide, parameters.oceanSide),
       skyBoxMaterial
     );
-    skyBox.position.set(a, b+250, c);
+    skyBox.position.set(a, b+200, c);
     scene.add( skyBox );
   }
+
+//---------------- NEIGE --------------------
+
+var SNOW_Picture = 'textures/rond-blanc.png'; 
+var SNOW_no = 15;  
+  
+var SNOW_browser_IE_NS = (document.body.clientHeight) ? 1 : 0;  
+var SNOW_browser_MOZ = (self.innerWidth) ? 1 : 0;  
+var SNOW_browser_IE7 = (document.documentElement.clientHeight) ? 1 : 0;  
+  
+var SNOW_Time;  
+var SNOW_dx, SNOW_xp, SNOW_yp;  
+var SNOW_am, SNOW_stx, SNOW_sty;   
+var i, SNOW_Browser_Width, SNOW_Browser_Height;  
+  
+if (SNOW_browser_IE_NS)  
+{  
+    SNOW_Browser_Width = document.body.clientWidth;  
+    SNOW_Browser_Height = document.body.clientHeight;  
+}  
+else if (SNOW_browser_MOZ)  
+{  
+    SNOW_Browser_Width = self.innerWidth - 20;  
+    SNOW_Browser_Height = self.innerHeight;  
+}  
+else if (SNOW_browser_IE7)  
+{  
+    SNOW_Browser_Width = document.documentElement.clientWidth;  
+    SNOW_Browser_Height = document.documentElement.clientHeight;  
+}  
+  
+SNOW_dx = new Array();  
+SNOW_xp = new Array();  
+SNOW_yp = new Array();  
+SNOW_am = new Array();  
+SNOW_stx = new Array();  
+SNOW_sty = new Array();  
+  
+for (i = 0; i < SNOW_no; ++ i)   
+{   
+    SNOW_dx[i] = 0;   
+    SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-50);  
+    SNOW_yp[i] = Math.random()*SNOW_Browser_Height;  
+    SNOW_am[i] = Math.random()*20;   
+    SNOW_stx[i] = 0.02 + Math.random()/10;  
+    SNOW_sty[i] = 0.7 + Math.random();  
+    if (i == 0) document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><a href=\"http://www.peters1.dk\" target=\"_blank\"><\img src=\""+SNOW_Picture+"\" border=\"0\"></a><\/div>");  
+    else document.write("<\div id=\"SNOW_flake"+ i +"\" style=\"position: absolute; z-index: "+ i +"; visibility: visible; top: 15px; left: 15px;\"><\img src=\""+SNOW_Picture+"\" border=\"0\"><\/div>");  
+}  
+  
+function SNOW_Weather()   
+{   
+  
+for (i = 0; i < SNOW_no; ++ i)   
+{   
+    SNOW_yp[i] += SNOW_sty[i];  
+  
+    if (SNOW_yp[i] > SNOW_Browser_Height-50)   
+    {  
+        SNOW_xp[i] = Math.random()*(SNOW_Browser_Width-SNOW_am[i]-30);  
+        SNOW_yp[i] = 0;  
+        SNOW_stx[i] = 0.02 + Math.random()/10;  
+        SNOW_sty[i] = 0.7 + Math.random();  
+    }  
+  
+    SNOW_dx[i] += SNOW_stx[i];  
+  
+    document.getElementById("SNOW_flake"+i).style.top=SNOW_yp[i]+"px";  
+    document.getElementById("SNOW_flake"+i).style.left=SNOW_xp[i] + SNOW_am[i]*Math.sin(SNOW_dx[i])+"px";  
+}  
+  
+SNOW_Time = setTimeout("SNOW_Weather()", 10);  
+  
+}  
+  
+SNOW_Weather();
+
+
+
+//------------------------------------
+
+
+    var pageColors = function() {
+        this.backgroundColor = '#091a28';
+        this.accentColor = '#91b8d9';
+        this.paragraphColor = '#e6e6e6';
+        };
+
+    window.onload = function() {
+        // add the control panel
+        var gui = new dat.GUI();
+        // add the backgroundColor control and wait for a change
+        gui.addColor(pageColors, 'backgroundColor').onChange(function(){
+            // when a change occurs, navigate the DOM to 'body' and update the CSS for the background color
+            $("body").css('background-color', pageColors.backgroundColor)
+        });
+        // add the accentColor control and wait for a change
+        gui.addColor(pageColors, 'accentColor').onChange(function(){
+            // navigate the DOM to find xxx##### with the class "accentText" and update the CSS for the color
+            $("body").find('.accentText').css('color', pageColors.accentColor);
+        });
+        gui.addColor(colors, 'paragraphColor').onChange(function(){
+            $("p").css('color', pageColors.paragraphColor)
+        });
+    };
+
+
+
+
 
 function onWindowResize() {
 
@@ -406,6 +405,31 @@ function animate() {
     direction.z = Number( moveForward ) - Number( moveBackward );
     direction.x = Number( moveLeft ) - Number( moveRight );
     direction.normalize(); // this ensures consistent movements in all directions
+
+
+
+    if ( controls.getObject().position.x > 250 ) {
+      velocity.x = 0;
+      moveRight = false;
+    }
+
+    if ( controls.getObject().position.x < -250 ) {
+
+      velocity.x = 0;
+      moveLeft = false;
+    }
+
+    if ( controls.getObject().position.z < -400 ) {
+      velocity.z = 0;
+      moveForward = false;
+    }
+    if ( controls.getObject().position.z < -450 ) {
+      velocity.z = 0;
+      moveBackward = false;
+    }
+
+
+
 
     if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
