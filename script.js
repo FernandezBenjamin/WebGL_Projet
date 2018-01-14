@@ -265,7 +265,7 @@ function init() {
 
 //---------------- NEIGE --------------------
 
-var SNOW_Picture = 'textures/rond-blanc.png'; 
+var SNOW_Picture = 'textures/particle2.png'; 
 var SNOW_no = 15;  
   
 var SNOW_browser_IE_NS = (document.body.clientHeight) ? 1 : 0;  
@@ -340,10 +340,6 @@ SNOW_Time = setTimeout("SNOW_Weather()", 10);
 SNOW_Weather();
 
 
-
-//------------------------------------
-
-
     var pageColors = function() {
         this.backgroundColor = '#091a28';
         this.accentColor = '#91b8d9';
@@ -353,20 +349,18 @@ SNOW_Weather();
     window.onload = function() {
         // add the control panel
         var gui = new dat.GUI();
-        // add the backgroundColor control and wait for a change
-        gui.addColor(pageColors, 'backgroundColor').onChange(function(){
-            // when a change occurs, navigate the DOM to 'body' and update the CSS for the background color
-            $("body").css('background-color', pageColors.backgroundColor)
-        });
-        // add the accentColor control and wait for a change
-        gui.addColor(pageColors, 'accentColor').onChange(function(){
-            // navigate the DOM to find xxx##### with the class "accentText" and update the CSS for the color
-            $("body").find('.accentText').css('color', pageColors.accentColor);
-        });
-        gui.addColor(colors, 'paragraphColor').onChange(function(){
-            $("p").css('color', pageColors.paragraphColor)
-        });
+
+
+
+
+        
     };
+
+
+//------------------------------------
+
+
+
 
 
 
@@ -407,7 +401,7 @@ function animate() {
     direction.normalize(); // this ensures consistent movements in all directions
 
 
-
+/*
     if ( controls.getObject().position.x > 250 ) {
       velocity.x = 0;
       moveRight = false;
@@ -427,7 +421,7 @@ function animate() {
       velocity.z = 0;
       moveBackward = false;
     }
-
+*/
 
 
 
