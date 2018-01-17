@@ -118,7 +118,7 @@ function init() {
 
     var audioLoader = new THREE.AudioLoader();
 
-    audioLoader.load( 'sound/pluie.ogg', function( buffer ) {
+    audioLoader.load( 'sound/pluie.mp3', function( buffer ) {
       sound.setBuffer( buffer );
       sound.setLoop( true );
       sound.setVolume( 0.5 );
@@ -410,8 +410,8 @@ function animate() {
     var time = performance.now();
     var delta = ( time - prevTime ) / 100; //Change la vitesse (par défaut c'etait à 1000)
 
-    velocity.x -= velocity.x * 7.0 * delta;
-    velocity.z -= velocity.z * 7.0 * delta;
+    velocity.x -= velocity.x * 10.0 * delta;
+    velocity.z -= velocity.z * 10.0 * delta;
 
     velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 
@@ -421,31 +421,31 @@ function animate() {
 
 
 
-    // if ( controls.getObject().position.x > 250 ) {
-    //   velocity.x = 0;
-    //   moveRight = false;
-    // }
-    //
-    // if ( controls.getObject().position.x < -250 ) {
-    //
-    //   velocity.x = 0;
-    //   moveLeft = false;
-    // }
-    //
-    // if ( controls.getObject().position.z < -400 ) {
-    //   velocity.z = 0;
-    //   moveForward = false;
-    // }
-    // if ( controls.getObject().position.z < -450 ) {
-    //   velocity.z = 0;
-    //   moveBackward = false;
-    // }
+    if ( controls.getObject().position.x > 250 ) {
+      velocity.x = 0;
+      moveRight = false;
+   }
+
+    if ( controls.getObject().position.x < -250 ) {
+
+      velocity.x = 0;
+      moveLeft = false;
+    }
+
+    if ( controls.getObject().position.z < -400 ) {
+      velocity.z = 0;
+      moveForward = false;
+   }
+   if ( controls.getObject().position.z < -450 ) {
+      velocity.z = 0;
+      moveBackward = false;
+    }
 
 
 
 
-    if ( moveForward || moveBackward ) velocity.z -= direction.z * 10.0 * delta;
-    if ( moveLeft || moveRight ) velocity.x -= direction.x * 10.0 * delta;
+    if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
+    if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
 
     if ( onObject === true ) {
 
